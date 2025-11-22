@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* --- TEMPLATE 1 THEME: ETHEREAL GLASS --- */
+  
+  /* Primary: Sage Green (Hijau Alam yang Tenang) */
+  --color-sage-50: #f6f8f6;
+  --color-sage-100: #eaf0ea;
+  --color-sage-200: #d5e0d5;
+  --color-sage-300: #b6c8b6;
+  --color-sage-400: #91aa91;
+  --color-sage-500: #8a9a5b; /* Main Sage Color */
+  --color-sage-600: #5e705e;
+  --color-sage-700: #4a584a;
+  --color-sage-800: #3d473d;
+  --color-sage-900: #333a33;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Accent: Elegant Gold (Emas Mewah) */
+  --color-gold-100: #f9f5e3;
+  --color-gold-200: #f0e6b8;
+  --color-gold-300: #e6d285;
+  --color-gold-400: #dcc05c;
+  --color-gold-500: #d4af37; /* Main Gold Color */
+  --color-gold-600: #aa8625;
+  --color-gold-700: #88651e;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Neutral: Paper Texture (Dasar Kertas) */
+  --color-paper-50: #fdfbf7;
+  --color-paper-100: #f7f3eb;
+
+  /* --- FONTS --- */
+  /* Asumsi font diload di layout.tsx sebagai variabel CSS */
+  --font-serif: var(--font-playfair), serif;
+  --font-sans: var(--font-inter), sans-serif;
+
+  /* --- ANIMATIONS --- */
+  --animate-fade-in: fadeIn 1.5s ease-in-out forwards;
+  --animate-fade-up: fadeUp 1s ease-out forwards;
+  --animate-wax-melt: waxMelt 1.5s ease-out forwards;
+  --animate-envelope-open: envelopeOpen 1s ease-in-out forwards;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  @keyframes fadeUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes waxMelt {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+  @keyframes envelopeOpen {
+    0% { transform: rotateX(0deg); }
+    100% { transform: rotateX(180deg); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
   }
 }
 
+/* --- CUSTOM UTILITIES --- */
+@layer components {
+  /* Efek Kaca Ethereal (Buram & Elegan) */
+  .glass-ethereal {
+    @apply backdrop-blur-xl border border-white/30 shadow-2xl;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.6) 0%,
+      rgba(255, 255, 255, 0.2) 100%
+    );
+  }
+
+  /* Efek Teks Emas Bersinar */
+  .text-gold-glow {
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+}
+
+/* Default Body */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper-50);
+  color: var(--color-sage-900);
 }

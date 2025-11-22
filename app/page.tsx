@@ -1,65 +1,101 @@
-import Image from "next/image";
+"use client";
+
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Music, VolumeX } from 'lucide-react'; // Tambah icon VolumeX untuk mute
+import OpeningGate from './components/OpeningGate';
+import HeroSection from './components/HeroSection';
+import EventDetails from './components/EventDetails';
+import OurStory from './components/OurStory';
+import Gallery from './components/Gallery';
+import RsvpSection from './components/RsvpSection';
+import GiftSection from './components/GiftSection';
+import BackgroundMusic from './components/BackgroundMusic'; // <--- Import Baru
 
 export default function Home() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+
+  const handleOpenInvitation = () => {
+    setIsOpen(true);
+    setIsMusicPlaying(true); 
+  };
+
+  const toggleMusic = () => {
+    setIsMusicPlaying(!isMusicPlaying);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen w-full relative overflow-x-hidden bg-paper-50">
+      
+      {/* --- KOMPONEN MUSIK (Hidden) --- */}
+      <BackgroundMusic isPlaying={isMusicPlaying} />
+
+      {/* 1. GERBANG PEMBUKA */}
+      <AnimatePresence>
+        {!isOpen && (
+          <OpeningGate onOpen={handleOpenInvitation} />
+        )}
+      </AnimatePresence>
+
+      {/* 2. KONTEN UTAMA */}
+      <motion.main 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 1.5, delay: 0.5 }}
+        className="relative w-full"
+      >
+        
+        <HeroSection />
+
+        <div className="relative z-20 -mt-10 md:-mt-20 pb-10 bg-gradient-to-b from-transparent via-paper-50 to-paper-50"> 
+           <EventDetails />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="relative z-20 bg-paper-50">
+           <OurStory />
         </div>
-      </main>
+
+        <div className="relative z-20 bg-paper-50">
+           <Gallery />
+        </div>
+
+        <div className="relative z-20 bg-paper-50 border-t border-sage-100">
+           <RsvpSection />
+        </div>
+
+        <div className="relative z-20 bg-paper-50 pb-24">
+           <GiftSection />
+        </div>
+
+        <div className="relative z-20 py-8 text-center text-sage-400 text-xs bg-sage-50">
+          <p>© 2025 Romeo & Juliet Wedding.</p>
+          <p>Created with Love by Wedding Service.</p>
+        </div>
+
+        {/* Floating Music Control Button */}
+        {isOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }} // Munculnya lebih cepat biar user sadar ada musik
+            className="fixed bottom-6 right-6 z-50"
+          >
+            <button 
+              onClick={toggleMusic}
+              className={`p-3 rounded-full backdrop-blur-md border border-sage-200 shadow-lg transition-all duration-500 hover:scale-110 ${
+                isMusicPlaying 
+                  ? "bg-gold-100/80 text-gold-600 animate-spin-slow" 
+                  : "bg-white/80 text-sage-400"
+              }`}
+              title={isMusicPlaying ? "Matikan Musik" : "Putar Musik"}
+            >
+              {isMusicPlaying ? <Music size={20} /> : <VolumeX size={20} />}
+            </button>
+          </motion.div>
+        )}
+
+      </motion.main>
     </div>
   );
 }
