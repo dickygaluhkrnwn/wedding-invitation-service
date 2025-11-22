@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "./components/SmoothScroll";
+import CustomCursor from "./components/CustomCursor";
 
 // 1. Setup Font
 // Inter untuk teks body (modern & bersih)
@@ -57,8 +59,14 @@ export default function RootLayout({
     <html lang="id" className="scroll-smooth">
       <body className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-paper-50 text-sage-900 selection:bg-sage-200 selection:text-sage-900 overflow-x-hidden`}>
         
+        {/* --- FASE 0: GLOBAL COMPONENTS --- */}
+        <SmoothScroll />
+        <CustomCursor />
+        
+        {/* Noise Overlay (Efek tekstur kertas film) */}
+        <div className="noise-overlay"></div>
+        
         {/* Background Texture Global (Pola Kertas Halus) */}
-        {/* Menggunakan pattern online yang ringan sebagai overlay */}
         <div className="fixed inset-0 z-0 opacity-30 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cream-paper.png')] mix-blend-multiply"></div>
         
         {/* Konten Utama */}

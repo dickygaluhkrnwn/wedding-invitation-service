@@ -1,35 +1,34 @@
 @import "tailwindcss";
 
 @theme {
-  /* --- TEMPLATE 1 THEME: ETHEREAL GLASS --- */
+  /* --- TEMPLATE 1 THEME: ETHEREAL GLASS (UPGRADED) --- */
   
-  /* Primary: Sage Green (Hijau Alam yang Tenang) */
-  --color-sage-50: #f6f8f6;
-  --color-sage-100: #eaf0ea;
-  --color-sage-200: #d5e0d5;
-  --color-sage-300: #b6c8b6;
-  --color-sage-400: #91aa91;
-  --color-sage-500: #8a9a5b; /* Main Sage Color */
-  --color-sage-600: #5e705e;
-  --color-sage-700: #4a584a;
-  --color-sage-800: #3d473d;
-  --color-sage-900: #333a33;
+  /* Primary: Deep Sage */
+  --color-sage-50: #f4f7f4;
+  --color-sage-100: #e3e9e3;
+  --color-sage-200: #c5d3c5;
+  --color-sage-300: #9eb69e;
+  --color-sage-400: #7a957a;
+  --color-sage-500: #5f7a5f;
+  --color-sage-600: #4a614a;
+  --color-sage-700: #384a38;
+  --color-sage-800: #2a362a;
+  --color-sage-900: #1e261e;
 
-  /* Accent: Elegant Gold (Emas Mewah) */
-  --color-gold-100: #f9f5e3;
-  --color-gold-200: #f0e6b8;
-  --color-gold-300: #e6d285;
-  --color-gold-400: #dcc05c;
-  --color-gold-500: #d4af37; /* Main Gold Color */
-  --color-gold-600: #aa8625;
-  --color-gold-700: #88651e;
+  /* Accent: Royal Antique Gold */
+  --color-gold-100: #fbf7e6;
+  --color-gold-200: #f3e6b0;
+  --color-gold-300: #e9cf70;
+  --color-gold-400: #deba3f;
+  --color-gold-500: #c5a028;
+  --color-gold-600: #9e7b1c;
+  --color-gold-700: #785912;
 
-  /* Neutral: Paper Texture (Dasar Kertas) */
-  --color-paper-50: #fdfbf7;
-  --color-paper-100: #f7f3eb;
+  /* Neutral: Rich Paper */
+  --color-paper-50: #fdfcf8;
+  --color-paper-100: #f7f5ee;
 
   /* --- FONTS --- */
-  /* Asumsi font diload di layout.tsx sebagai variabel CSS */
   --font-serif: var(--font-playfair), serif;
   --font-sans: var(--font-inter), sans-serif;
 
@@ -40,6 +39,7 @@
   --animate-envelope-open: envelopeOpen 1s ease-in-out forwards;
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-spin-slow: spin 8s linear infinite;
 
   @keyframes fadeIn {
     0% { opacity: 0; }
@@ -59,30 +59,97 @@
   }
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
+    50% { transform: translateY(-15px); }
   }
 }
 
 /* --- CUSTOM UTILITIES --- */
 @layer components {
-  /* Efek Kaca Ethereal (Buram & Elegan) */
+  /* Efek Kaca Ethereal */
   .glass-ethereal {
-    @apply backdrop-blur-xl border border-white/30 shadow-2xl;
+    @apply backdrop-blur-xl border border-white/40 shadow-xl;
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.6) 0%,
-      rgba(255, 255, 255, 0.2) 100%
+      rgba(255, 255, 255, 0.7) 0%,
+      rgba(255, 255, 255, 0.3) 100%
     );
   }
 
   /* Efek Teks Emas Bersinar */
   .text-gold-glow {
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    text-shadow: 0 0 20px rgba(197, 160, 40, 0.3);
+  }
+
+  /* --- WAJIB: 3D Perspective untuk Card Tilt --- */
+  .perspective-1000 {
+    perspective: 1000px; /* Ini kunci agar efek 3D terlihat! */
+  }
+  
+  /* Opsional: Sembunyikan scrollbar pada container yang bisa discroll */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-gold-300);
+    border-radius: 10px;
   }
 }
 
-/* Default Body */
-body {
+/* --- GLOBAL SETTINGS --- */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Sembunyikan scrollbar default agar lebih bersih */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
   background: var(--color-paper-50);
-  color: var(--color-sage-900);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-sage-200);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-sage-400);
+}
+
+/* Noise Texture Overlay */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.03; 
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Cursor Styles (Hanya aktif di Desktop) */
+@media (min-width: 768px) {
+  body {
+    cursor: none;
+  }
+  a, button, .cursor-pointer {
+    cursor: none;
+  }
 }
